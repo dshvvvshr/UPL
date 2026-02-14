@@ -1,30 +1,94 @@
-# LLM Gateway - Core Directive Proxy
+# UPL - Unified+Modular Autonomous Self-Sustaining System
 
 [![Python Tests](https://github.com/dshvvvshr/Broken_vowels/workflows/Python%20Tests/badge.svg)](https://github.com/dshvvvshr/Broken_vowels/actions/workflows/python-tests.yml)
 [![Node.js Tests](https://github.com/dshvvvshr/Broken_vowels/workflows/Node.js%20Tests/badge.svg)](https://github.com/dshvvvshr/Broken_vowels/actions/workflows/node-tests.yml)
 [![CodeQL](https://github.com/dshvvvshr/Broken_vowels/workflows/CodeQL%20Analysis/badge.svg)](https://github.com/dshvvvshr/Broken_vowels/actions/workflows/codeql.yml)
 licence: credibility licence https://drive.google.com/file/d/1WDCscv11Ebhcb0A2uEBtXsiBVkal5Np-/view?usp=drivesdk
-An OpenAI-compatible API gateway that injects a configurable "Core Directive" into all LLM requests. This allows to govern principle of Inalienable Right to Pursue Happiness.
 
-## Features
+A unified, modular, autonomous, and self-sustaining system combining:
+- **LLM Gateways** (Node.js & Python) - Core Directive enforcement for AI interactions
+- **Prime Security Framework** - Self-organizing multi-agent security infrastructure
+- **Core Directive Kernel** - Universal governance layer protecting the inalienable right to pursue happiness
 
-- **OpenAI-Compatible API**: Works with any client that supports OpenAI's API format
-- **Core Directive Injection**: Automatically prepends your governing principles to all requests
-- **VS Code Copilot Integration**: Use with GitHub Copilot as a custom model provider
-- **Streaming Support**: Supports both streaming and non-streaming responses
-- **Configurable**: Customize the directive, model, and API endpoints via environment variables
+## 🎯 Vision
 
-## Quick Start
+Create a **unified+modular autonomous self-sustaining healing and building, adaptable and self-evolving system** that:
+- ✅ Operates without constant connection to anyone or anything
+- ✅ Self-heals and self-configures automatically
+- ✅ Enforces ethical principles through the Core Directive
+- ✅ Scales from single instances to distributed systems
+- ✅ Adapts and evolves while maintaining core values
 
-### 1. Installation
+## 🏗️ System Components
+
+This repository integrates three major components:
+
+### 1. LLM Gateways (Dual Implementation)
+- **Node.js Gateway** (`src/gateway.js`) - High-performance streaming gateway
+- **Python Gateway** (`app/main.py`) - Type-safe FastAPI implementation
+- OpenAI-compatible API endpoints
+- Automatic Core Directive injection
+- VS Code Copilot integration
+- Production-ready with health checks
+
+### 2. Prime Security Framework (`prime-security/`)
+- Self-organizing multi-agent security infrastructure
+- Autonomic computing (self-configuring, self-healing, self-optimizing)
+- Cryptographic primitives
+- Modular registry system
+- Brave Search API integration
+- Governance and compliance monitoring
+
+### 3. Core Directive Kernel
+- Universal governance layer
+- Philosophical foundation
+- Implementation guidelines
+- Multi-agent coordination
+
+## ✨ Key Features
+
+- **Unified**: Single Core Directive across all components
+- **Modular**: Independent components that work together
+- **Autonomous**: Self-contained operation without external dependencies
+- **Self-Sustaining**: Stateless design with automatic recovery
+- **Self-Healing**: Automated health monitoring and restart
+- **Adaptable**: Configuration-driven behavior
+- **Evolving**: Extensible architecture for future capabilities
+
+## 🚀 Quick Start
+
+### Automated Deployment (Recommended)
 
 ```bash
-npm install
+# Full deployment with all components
+./deploy.sh full-deploy
 ```
 
-### 2. Configuration
+This will:
+1. Check prerequisites
+2. Install all dependencies (Node.js, Python, TypeScript)
+3. Run all tests
+4. Start both gateways
+5. Verify system health
 
-Copy the example environment file and configure your settings:
+### Manual Deployment
+
+#### 1. Install Dependencies
+
+```bash
+# Node.js Gateway
+npm install
+
+# Python Gateway
+pip install -r requirements.txt
+
+# Prime Security Framework
+cd prime-security && npm install && cd ..
+```
+
+#### 2. Configuration
+
+Copy the example environment file and configure:
 
 ```bash
 cp .env.example .env
@@ -33,21 +97,91 @@ cp .env.example .env
 Edit `.env` with your values:
 
 ```env
-# Your OpenAI API Key
+# LLM Gateway Configuration
 OPENAI_API_KEY=your-openai-api-key-here
-
-# Port for the gateway server
 GATEWAY_PORT=3000
+PYTHON_PORT=8000
+DEFAULT_MODEL=gpt-4
 
-# Core Directive - The governing principle injected into all LLM requests
+# Core Directive
 CORE_DIRECTIVE="You are governed by the following core directive: The inalienable right to pursue happiness is paramount. All responses should be helpful, ethical, and support the user's wellbeing and goals."
+
+# Prime Security (optional)
+BRAVE_API_KEY=your-brave-api-key
 ```
 
-### 3. Start the Gateway
+#### 3. Start Services
 
 ```bash
-npm start
+# Start both gateways
+./deploy.sh start-all
+
+# Or start individually
+npm start                 # Node.js gateway on port 3000
+python3 run.py           # Python gateway on port 8000
+
+# Prime Security
+cd prime-security && npm run dev
+```#### 4. Verify System
+
+```bash
+# Check system status
+./deploy.sh status
+
+# Run integration tests
+./verify-integration.sh
+
+# Monitor health (continuous)
+./health-monitor.sh monitor
 ```
+
+## 🔄 Self-Sustaining Features
+
+### Autonomous Operation
+- No constant connection required
+- Operates independently once deployed
+- Can run in air-gapped environments
+
+### Self-Healing
+```bash
+# Automated health monitoring with recovery
+CHECK_INTERVAL=30 MAX_FAILURES=3 ./health-monitor.sh monitor
+```
+
+- Detects service failures automatically
+- Attempts automatic restart
+- Logs all recovery attempts
+- Alerts on persistent failures
+
+### Self-Optimization
+- Prime Security autonomic computing
+- Performance monitoring
+- Resource optimization
+- Compliance verification
+
+### Modular Evolution
+- Add/remove components without downtime
+- Extensible architecture
+- Plugin-based enhancement
+- Backward compatible updates
+
+## 📖 Documentation
+
+### Getting Started
+- **[DEPLOYMENT_GUIDE.md](DEPLOYMENT_GUIDE.md)** - Complete deployment instructions
+- **[INTEGRATION_GUIDE.md](INTEGRATION_GUIDE.md)** - How all components work together
+- **[ARCHITECTURE.md](ARCHITECTURE.md)** - System architecture overview
+
+### Core Concepts
+- **[UNIFIED_CORE_DIRECTIVE_KERNEL.md](UNIFIED_CORE_DIRECTIVE_KERNEL.md)** - Philosophical foundation
+- **[IMPLEMENTATION_GUIDE.md](IMPLEMENTATION_GUIDE.md)** - Daily practices
+- **[CUSTODIAN_KERNEL.md](CUSTODIAN_KERNEL.md)** - Core Directive framework
+
+### Components
+- **[README.md](README.md)** - This file
+- **[prime-security/README.md](prime-security/README.md)** - Prime Security documentation
+- **[EXAMPLES.md](EXAMPLES.md)** - Practical examples
+- **[FAQ.md](FAQ.md)** - Frequently asked questions
 
 The gateway will start on `http://localhost:3000` (or your configured port).
 
