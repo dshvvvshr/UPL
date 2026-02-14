@@ -1,0 +1,18 @@
+# Git ignore file
+
+# Ignore node_modules
+node_modules/
+
+# Ignore log files
+logs/
+
+# Ignore coverage directory
+coverage/
+
+# Ignore environment variable files
+.env
+
+# Ignore build output
+build/
+
+# Ignore package-lock.json and yarn.lock as they should be included now
