@@ -14,5 +14,6 @@ coverage/
 
 # Ignore build output
 build/
+dist/
 
 # Ignore package-lock.json and yarn.lock as they should be included now

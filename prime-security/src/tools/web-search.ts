@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { braveSearchApi, formatSearchResults, baseSearchSchema } from '../brave-api.js';
+import { braveSearchApi, formatSearchResults, baseSearchSchema, MCPToolResponse } from '../brave-api';
 
 export const webSearchSchema = baseSearchSchema.extend({
   goggles_id: z.string().optional().describe('Goggles ID for custom ranking'),
@@ -7,7 +7,7 @@ export const webSearchSchema = baseSearchSchema.extend({
   extra_snippets: z.boolean().optional().describe('Include extra snippets in results'),
 });
 
-export async function webSearch(args: z.infer<typeof webSearchSchema>, apiKey: string) {
+export async function webSearch(args: z.infer<typeof webSearchSchema>, apiKey: string): Promise<MCPToolResponse> {
   const data = await braveSearchApi('web/search', args, apiKey);
   return {
     content: [
