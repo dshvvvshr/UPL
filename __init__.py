@@ -11,6 +11,13 @@ Modules:
     evaluator: Detailed evaluation engine
 """
 
+import os
+import sys
+
+_PACKAGE_DIR = os.path.abspath(os.path.dirname(__file__))
+if _PACKAGE_DIR not in sys.path:
+    sys.path.insert(0, _PACKAGE_DIR)
+
 from core_directive import (
     ActionResult,
     CoreDirective,

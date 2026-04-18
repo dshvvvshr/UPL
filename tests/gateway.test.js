@@ -3,9 +3,13 @@
  */
 
 const request = require('supertest');
-const { app, injectCoreDirective } = require('../src/gateway');
+const { app, injectCoreDirective, clearUsers } = require('../src/gateway');
 
 describe('LLM Gateway', () => {
+  beforeEach(() => {
+    clearUsers();
+  });
+
   describe('Health Check', () => {
     it('should return ok status', async () => {
       const response = await request(app).get('/health');
@@ -143,6 +147,40 @@ describe('LLM Gateway', () => {
       } else {
         delete process.env.DOTENV_CONFIG_PATH;
       }
+    });
+  });
+
+  describe('Users Endpoint', () => {
+    it('should create a user with name and email', async () => {
+      const response = await request(app)
+        .post('/v1/users')
+        .send({ name: 'Alice', email: 'alice@example.com' });
+
+      expect(response.status).toBe(201);
+      expect(response.body.user).toHaveProperty('id');
+      expect(response.body.user.name).toBe('Alice');
+      expect(response.body.user.email).toBe('alice@example.com');
+      expect(response.body.user).toHaveProperty('createdAt');
+    });
+
+    it('should validate required fields', async () => {
+      const response = await request(app)
+        .post('/v1/users')
+        .send({ name: 'Missing Email' });
+
+      expect(response.status).toBe(400);
+      expect(response.body.error.message).toContain('required');
+    });
+
+    it('should list created users', async () => {
+      await request(app)
+        .post('/v1/users')
+        .send({ name: 'Carol', email: 'carol@example.com' });
+
+      const response = await request(app).get('/v1/users');
+      expect(response.status).toBe(200);
+      expect(Array.isArray(response.body.users)).toBe(true);
+      expect(response.body.users.find(u => u.email === 'carol@example.com')).toBeTruthy();
     });
   });
 });

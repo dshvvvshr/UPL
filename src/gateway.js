@@ -20,6 +20,7 @@ const PORT = process.env.GATEWAY_PORT || 3000;
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 const OPENAI_BASE_URL = process.env.OPENAI_BASE_URL || 'https://api.openai.com';
 const DEFAULT_MODEL = process.env.DEFAULT_MODEL || 'gpt-4';
+const users = [];
 
 // Core Directive - The governing principle for the LLM
 const CORE_DIRECTIVE = process.env.CORE_DIRECTIVE || `You are governed by the following core directive: 
@@ -48,6 +49,60 @@ app.get('/v1/models', (req, res) => {
       }
     ]
   });
+});
+
+/**
+ * Create a new user entry
+ */
+app.post('/v1/users', (req, res) => {
+  const name = typeof req.body?.name === 'string' ? req.body.name.trim() : '';
+  const email = typeof req.body?.email === 'string' ? req.body.email.trim() : '';
+
+  if (!name || !email) {
+    return res.status(400).json({
+      error: {
+        message: 'Both name and email are required to create a user',
+        type: 'validation_error'
+      }
+    });
+  }
+
+  const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailPattern.test(email)) {
+    return res.status(400).json({
+      error: {
+        message: 'A valid email address is required',
+        type: 'validation_error'
+      }
+    });
+  }
+
+  const existing = users.find((user) => user.email.toLowerCase() === email.toLowerCase());
+  if (existing) {
+    return res.status(409).json({
+      error: {
+        message: 'A user with this email already exists',
+        type: 'conflict_error'
+      }
+    });
+  }
+
+  const user = {
+    id: `user_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 8)}`,
+    name,
+    email,
+    createdAt: new Date().toISOString()
+  };
+
+  users.push(user);
+  return res.status(201).json({ user });
+});
+
+/**
+ * List created users
+ */
+app.get('/v1/users', (req, res) => {
+  res.json({ users });
 });
 
 /**
@@ -230,6 +285,13 @@ function handleStreamingRequest(modifiedRequest, req, res) {
   proxyReq.end();
 }
 
+/**
+ * Utility for tests to reset in-memory user data
+ */
+function clearUsers() {
+  users.length = 0;
+}
+
 // Start the server
 if (require.main === module) {
   app.listen(PORT, () => {
@@ -240,4 +302,4 @@ if (require.main === module) {
   });
 }
 
-module.exports = { app, injectCoreDirective };
+module.exports = { app, injectCoreDirective, clearUsers };
