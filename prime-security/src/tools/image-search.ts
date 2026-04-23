@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { braveSearchApi } from '../brave-api.js';
+import { braveSearchApi, ImageSearchResult, MCPToolResponse } from '../brave-api';
 
 const MAX_IMAGE_RESULTS = 150;
 
@@ -10,13 +10,13 @@ export const imageSearchSchema = z.object({
   spellcheck: z.boolean().optional().describe('Enable spell checking'),
 });
 
-export async function imageSearch(args: z.infer<typeof imageSearchSchema>, apiKey: string) {
+export async function imageSearch(args: z.infer<typeof imageSearchSchema>, apiKey: string): Promise<MCPToolResponse> {
   const data = await braveSearchApi('images/search', args, apiKey);
   
   let output = '# Image Search Results\n\n';
   
   if (data.results && data.results.length > 0) {
-    data.results.forEach((result: any, index: number) => {
+    data.results.forEach((result: ImageSearchResult, index: number) => {
       output += `### ${index + 1}. ${result.title || 'Untitled'}\n`;
       output += `**Image URL:** ${result.url || 'N/A'}\n`;
       output += `**Thumbnail:** ${result.thumbnail?.src || 'N/A'}\n`;

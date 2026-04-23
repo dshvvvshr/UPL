@@ -28,12 +28,70 @@ export interface WebSearchResult {
   family_friendly?: boolean;
 }
 
+export interface NewsSearchResult {
+  title?: string;
+  url?: string;
+  description?: string;
+  age?: string;
+  source?: string;
+}
+
+export interface VideoSearchResult {
+  title?: string;
+  url?: string;
+  description?: string;
+  age?: string;
+  thumbnail?: { src?: string };
+}
+
+export interface LocationSearchResult {
+  title?: string;
+  address?: string;
+  phone?: string;
+  rating?: number;
+  rating_count?: number;
+}
+
+export interface ImageSearchResult {
+  title?: string;
+  url?: string;
+  thumbnail?: { src?: string };
+  source?: string;
+  properties?: { width?: number; height?: number };
+}
+
+export interface SummarizerEnrichment {
+  title?: string;
+  text?: string;
+}
+
+export interface BraveApiResponse {
+  web?: { results?: WebSearchResult[] };
+  news?: { results?: NewsSearchResult[] };
+  videos?: { results?: VideoSearchResult[] };
+  locations?: { results?: LocationSearchResult[] };
+  summarizer?: { summary?: string };
+  results?: ImageSearchResult[];
+  summary?: string;
+  enrichments?: SummarizerEnrichment[];
+}
+
+export interface MCPToolContent {
+  type: 'text';
+  text: string;
+}
+
+export interface MCPToolResponse {
+  content: MCPToolContent[];
+  [key: string]: unknown;
+}
+
 // Make API call to Brave Search
 export async function braveSearchApi(
   endpoint: string,
   params: Record<string, string | number | boolean>,
   apiKey: string
-): Promise<any> {
+): Promise<BraveApiResponse> {
   const url = new URL(`https://api.search.brave.com/res/v1/${endpoint}`);
   
   // Add query parameters
@@ -57,11 +115,11 @@ export async function braveSearchApi(
     throw new Error(`Brave API error (${response.status}): ${errorText}`);
   }
 
-  return response.json();
+  return response.json() as Promise<BraveApiResponse>;
 }
 
 // Format search results for MCP response
-export function formatSearchResults(data: any, searchType: string): string {
+export function formatSearchResults(data: BraveApiResponse, searchType: string): string {
   let output = `# ${searchType} Search Results\n\n`;
 
   if (data.web?.results && data.web.results.length > 0) {
@@ -77,7 +135,7 @@ export function formatSearchResults(data: any, searchType: string): string {
 
   if (data.news?.results && data.news.results.length > 0) {
     output += '## News Results\n\n';
-    data.news.results.forEach((result: any, index: number) => {
+    data.news.results.forEach((result: NewsSearchResult, index: number) => {
       output += `### ${index + 1}. ${result.title || 'Untitled'}\n`;
       output += `**URL:** ${result.url || 'N/A'}\n`;
       output += `**Description:** ${result.description || 'No description available'}\n`;
@@ -88,7 +146,7 @@ export function formatSearchResults(data: any, searchType: string): string {
 
   if (data.videos?.results && data.videos.results.length > 0) {
     output += '## Video Results\n\n';
-    data.videos.results.forEach((result: any, index: number) => {
+    data.videos.results.forEach((result: VideoSearchResult, index: number) => {
       output += `### ${index + 1}. ${result.title || 'Untitled'}\n`;
       output += `**URL:** ${result.url || 'N/A'}\n`;
       output += `**Description:** ${result.description || 'No description available'}\n`;
@@ -99,7 +157,7 @@ export function formatSearchResults(data: any, searchType: string): string {
 
   if (data.locations?.results && data.locations.results.length > 0) {
     output += '## Local Results\n\n';
-    data.locations.results.forEach((result: any, index: number) => {
+    data.locations.results.forEach((result: LocationSearchResult, index: number) => {
       output += `### ${index + 1}. ${result.title || 'Untitled'}\n`;
       output += `**Address:** ${result.address || 'N/A'}\n`;
       if (result.phone) output += `**Phone:** ${result.phone}\n`;
