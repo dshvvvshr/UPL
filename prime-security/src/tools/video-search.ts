@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { braveSearchApi } from '../brave-api.js';
+import { braveSearchApi, VideoSearchResult, MCPToolResponse } from '../brave-api';
 
 const MAX_VIDEO_RESULTS = 20;
 
@@ -10,13 +10,13 @@ export const videoSearchSchema = z.object({
   spellcheck: z.boolean().optional().describe('Enable spell checking'),
 });
 
-export async function videoSearch(args: z.infer<typeof videoSearchSchema>, apiKey: string) {
+export async function videoSearch(args: z.infer<typeof videoSearchSchema>, apiKey: string): Promise<MCPToolResponse> {
   const data = await braveSearchApi('videos/search', args, apiKey);
   
   let output = '# Video Search Results\n\n';
   
   if (data.results && data.results.length > 0) {
-    data.results.forEach((result: any, index: number) => {
+    data.results.forEach((result: VideoSearchResult, index: number) => {
       output += `### ${index + 1}. ${result.title || 'Untitled'}\n`;
       output += `**URL:** ${result.url || 'N/A'}\n`;
       output += `**Description:** ${result.description || 'No description available'}\n`;

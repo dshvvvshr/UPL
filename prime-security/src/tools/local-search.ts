@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { braveSearchApi, formatSearchResults } from '../brave-api.js';
+import { braveSearchApi, formatSearchResults, MCPToolResponse } from '../brave-api';
 
 const MAX_LOCAL_RESULTS = 20;
 
@@ -8,7 +8,7 @@ export const localSearchSchema = z.object({
   count: z.number().min(1).max(MAX_LOCAL_RESULTS).optional().describe('Number of results (1-20)'),
 });
 
-export async function localSearch(args: z.infer<typeof localSearchSchema>, apiKey: string) {
+export async function localSearch(args: z.infer<typeof localSearchSchema>, apiKey: string): Promise<MCPToolResponse> {
   const data = await braveSearchApi('web/search', { ...args, search_type: 'local' }, apiKey);
   return {
     content: [

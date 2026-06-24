@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { braveSearchApi } from '../brave-api.js';
+import { braveSearchApi, NewsSearchResult, MCPToolResponse } from '../brave-api';
 
 const MAX_NEWS_RESULTS = 20;
 
@@ -11,13 +11,13 @@ export const newsSearchSchema = z.object({
   spellcheck: z.boolean().optional().describe('Enable spell checking'),
 });
 
-export async function newsSearch(args: z.infer<typeof newsSearchSchema>, apiKey: string) {
+export async function newsSearch(args: z.infer<typeof newsSearchSchema>, apiKey: string): Promise<MCPToolResponse> {
   const data = await braveSearchApi('news/search', args, apiKey);
   
   let output = '# News Search Results\n\n';
   
   if (data.results && data.results.length > 0) {
-    data.results.forEach((result: any, index: number) => {
+    data.results.forEach((result: NewsSearchResult, index: number) => {
       output += `### ${index + 1}. ${result.title || 'Untitled'}\n`;
       output += `**URL:** ${result.url || 'N/A'}\n`;
       output += `**Description:** ${result.description || 'No description available'}\n`;
